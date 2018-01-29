@@ -56,15 +56,16 @@ This runs train, validation and test. You can pass any other file to test() to t
  I then resorted to a logistic regression model to obtain a respectable classifier that also gives me probabilities. This gave me a marginally inferior score compared to SVM but gave me probabilities. I am using this model as my final submission for this Project. 
  
  ## Discussion
- I was really surprised by the neural network performance. Given that there is no real language information being conveyed and it is purely word counts that matter, I expected that neural networks will ace this dataset. It should also be noted that the conv net's training accuracy went up to almost 70% but the validation accuracy remained abysmally low. I had to regularize it pretty heavily in order to keep the model from overfitting that heavily. 
+ I was really surprised by the neural network performance given that it was a sufficiently large dataset. Moreover, as there is no real language information being conveyed and it is purely word counts that matter, I expected that neural networks will ace this dataset. It should also be noted that the conv net's training accuracy went up to almost 70% but the validation accuracy remained abysmally low. I had to regularize it pretty heavily in order to keep the model from overfitting that heavily. 
  
 A possible improvement for the neural network model is to remove the pooling layer and used the concatenated convolution output for inference. I tried to do this but it was extremely slow on my laptop and I was running out of memory on the cluster due to many parallel users.
  
- Another possible improvement would be lemmatize/stem words in the dataset. as this would reduce the number of words in the vocabulary. But I was skeptical of this solution given that most words are nouns and the improvement would not be substantial. 
+Another possible improvement would be lemmatize/stem words in the dataset. as this would reduce the number of words in the vocabulary. But I was skeptical of this solution given that most words are nouns and the improvement would not be substantial. 
  
- Features like TF-IDF scores don't help in this dataset given that it is the rare words that give any meaningful features in this dataset. 
+Features like TF-IDF scores don't help in this dataset given that it is the rare words that give any meaningful features in this dataset. 
  
- The Naive Bayes classifier could be improved much more by modelling the priors better.
+The Naive Bayes classifier could be improved much more by modelling the priors better.
  
- Using a decision tree or random forest classifier could also give good improvements. 
+Using a decision tree or random forest classifier could also give good improvements. 
 
+Dataset noise could be another factor. 
