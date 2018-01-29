@@ -37,7 +37,7 @@ def get_data(data_file, no_labels=False):
     Load data from file, concatenate multiple lines, tokenize and return
     :param data_file: Path to data file
     :param no_labels: True if unlabelled data is being read
-    :return: ngred_list, label_list, vocab, labels, max_len (labels omitted if no_labels is set)
+    :return: ingred_list, label_list, vocab, labels, max_len (labels omitted if no_labels is set)
     """
     data = utils.read_data(data_file)
     labels = set()
@@ -73,7 +73,7 @@ def build_dataset(data_file, sent_len=0):
     Loads data, builds vocab, calls vectorize and returns dataset as a numpy array
     :param data_file: Path to data
     :param sent_len: Max length of sentence
-    :return:
+    :return: Vectorized data, Vectorized labels, index to label dict, word to index dict
     """
     ingred_list, label_list, vocab, labels, max_len = get_data(data_file)
     if max_len < sent_len:
