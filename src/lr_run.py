@@ -4,14 +4,9 @@ References: https://towardsdatascience.com/machine-learning-nlp-text-classificat
 
 import utils
 import constants
-from nltk import word_tokenize
-import re
-import pickle as pkl
 import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.naive_bayes import MultinomialNB
 from sklearn.pipeline import Pipeline
-from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.model_selection import GridSearchCV
 from sklearn.linear_model import SGDClassifier
 
@@ -20,7 +15,7 @@ def get_data(data_file, no_labels=False):
     """
     :param data_file: Path to data file
     :param no_labels: Set true if reading unlabeled data
-    :return: Ingrediants list, Label list (or id_list if unlabeled data)
+    :return: Ingredients list, Label list (or id_list if unlabeled data)
     """
     data = utils.read_data(data_file)
     ingred_list = []

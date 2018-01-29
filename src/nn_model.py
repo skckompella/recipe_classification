@@ -13,7 +13,7 @@ class RecipeDataset(Dataset):
     """
     def __init__(self, x_train_path, y_train_path, x_dev_path, y_dev_path):
         """
-        All parameters below are file paths
+        All parameters below are file paths as indicated by the name
         :param x_train_path:
         :param y_train_path:
         :param x_dev_path:
@@ -51,7 +51,7 @@ class RecipeDataset(Dataset):
 class RecipeNet(nn.Module):
     """
     k-convolutional layers (in parallel) with different filter sizes;
-    followed by a few fully connected layer and a softmax layer
+    followed by a fully connected layer and a softmax layer
     """
     def __init__(self, vocab_len, num_labels, max_len):
         """
@@ -71,9 +71,6 @@ class RecipeNet(nn.Module):
         self.convs = nn.ModuleList([nn.Conv1d(self.embedding_size, self.embedding_size, K)
                                     for K in self.kernel_sizes])
         self.linear = nn.Linear(len(self.kernel_sizes) * self.embedding_size, num_labels)
-        self.fc1 = nn.Linear(max_len*self.embedding_size, 100)
-        self.fc2 = nn.Linear(100, 50)
-        self.fc3 = nn.Linear(50, num_labels)
         self.dropout = nn.Dropout(constants.DROPOUT)
         self.softmax = nn.LogSoftmax()
 

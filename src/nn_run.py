@@ -1,3 +1,4 @@
+from torch.autograd import Variable
 import cPickle as pickle
 import torch.optim as optim
 from torch.utils.data import DataLoader
@@ -26,7 +27,7 @@ def main():
     criterion = nn.NLLLoss()
     optimizer = optim.Adam(model.parameters(), lr=constants.LEARNING_RATE)
 
-    #DataLoader helps in batching
+    #DataLoader helps load data batches easily
     dloader = DataLoader(data, batch_size=constants.BATCH_SIZE, shuffle=True, num_workers=1)
 
     #Load dev set

@@ -1,7 +1,6 @@
 import json
 import cPickle as pkl
 
-# sys.setdefaultencoding('utf8')
 def read_data(data_file):
     with open(data_file) as json_data:
         data = json.load(json_data)
