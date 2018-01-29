@@ -24,8 +24,7 @@
 1. Clone repo
 2. Untar data files
 
-Run Logistic regression model (main submission):
-------------------------------------------------
+### Run Logistic regression model (main submission):
 ```bash 
  cd src
  python lr_run.py
