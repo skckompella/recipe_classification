@@ -1,5 +1,4 @@
 import torch
-from torch.autograd import Variable
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.utils.data import Dataset
@@ -7,7 +6,6 @@ import cPickle as pkl
 import numpy as np
 
 import constants
-from layers import *
 
 class RecipeDataset(Dataset):
     """
