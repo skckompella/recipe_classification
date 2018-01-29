@@ -17,16 +17,47 @@
 | Multinomial Naive Bayes | baseline_methods.py | 61.6 %              |
 | Linear SVM              | baseline_methods.py | 67.2 %              | 
 | Logistic Regression     | lr_run.py           | 66.1 %              |      
-| Multi Layer Perceptron  | nn_model.py         | 3.4 %  
-| Conv Net + MLP          | nn_model.py         | 6.1 %
+| Multi Layer Perceptron  | nn_model.py         | 6.4 %  
+| Conv Net + MLP          | nn_model.py         | 3.1 %
  
+## How to run
+1. Clone repo
+2. Untar data files
+
+Run Logistic regression model (main submission):
+------------------------------------------------
+```bash 
+ cd src
+ python lr_run.py
+```
+This runs train, validation and test. You can pass any other file to test() to test on different data
+
+Run Baseline methods (MNB and SVM): 
+----------------------------------
+```bash
+ cd src
+ python baseline_methods.py
+```
+
+Run Neural network models (Runs CNN model by default):
+------------------------------------------------------
+```bash 
+ cd src
+ python nn_preprocessing.py  #Required only once
+ python nn_run.py
+``` 
+
  ## Reason for model choices
  I started with a multinomial naive bayes classifier to obtain a baseline score for the dataset. I expected other models to be pretty close to the NB model given that its just a list of ingredients and there is no syntactic/semantic information being provided by the text. 
  
- With the same set of features (word counts), I tried a SVM classifier. Non linear models were taking forever to converge due to high sparsity. This model gave me the highest accuracy on dev set. However, since it uses a hinge loss, I cannot obtain a probability score as was needed in the problem.
+ With the same set of features (word counts), I tried a SVM classifier. Non linear models were taking forever to converge due to high sparsity. After some fine tuning, this model gave me the highest accuracy on dev set. However, since it uses a hinge loss, I cannot obtain a probability score as was needed in the problem.
  
- I wanted to see how neural network models would perform. Given that bag of words will be way too sparse, I used the usual lookup based embeddings for the ingredients. 
+ I wanted to see how neural network models would perform. Given that bag of words will be extremely sparse, I used the usual lookup based embeddings for the ingredients. I also considered pretrained word embeddings as it will be much denser representation but felt it should not give me any meaningful increase in performance. The reason being - there is no real structure in the input. It is just a set of ingredients. Were they mixed with natural language sentences, it would be more appropriate to use them as they carry syntactic and semantic information. I felt it was not needed for this task. 
  
- I then resorted to a logistic regression model. This gave me a marginally inferior score but gave me probabilities. I am using this model as my final submission for this Project. 
+ I first tried a feedforward neural network varying it between 3 to 5 layers. This gave me an accuracy score of 6.4%. While this does look abysmal, it was better than the conv net model. The conv net model was a bunch of convilutional layers with different filter sizes (varying between [2,3] to [2,3,4,5] ) followed by a max-pool layer. This gave me an even worse score of 3.1%
  
+ I then resorted to a logistic regression model to obtain a respectable classifier that also gives me probabilities. This gave me a marginally inferior score compared to SVM but gave me probabilities. I am using this model as my final submission for this Project. 
+ 
+ ## Discussion
+ I was really surprised by the neural network performance. It was interesting to note that the conv net's training accuracy went up to almost 70% but the validation accuracy remained abysmally low. I had to regularize it pretty heavily in order to 
 
