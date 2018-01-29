@@ -32,14 +32,13 @@ Run Logistic regression model (main submission):
 ```
 This runs train, validation and test. You can pass any other file to test() to test on different data
 
-###Run Baseline methods (MNB and SVM): 
+### Run Baseline methods (MNB and SVM): 
 ```bash
  cd src
  python baseline_methods.py
 ```
 
-###Run Neural network models (Runs CNN model by default):
-------------------------------------------------------
+### Run Neural network models (Runs CNN model by default):
 ```bash 
  cd src
  python nn_preprocessing.py  #Required only once
