@@ -4,6 +4,9 @@ import re
 import pickle as pkl
 import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer
+# import matplotlib.pyplot as plt
+
+FIX_LEN=40
 
 def tokenize(sentence):
     sentence = sentence.lower()
@@ -22,9 +25,12 @@ def vectorize(label_to_idx, word_to_idx, ingred_list, label_list, max_len):
     """
     X = []
     Y = []
+    keys = set(word_to_idx.keys())
     for i in range(len(label_list)):
         Y.append(label_to_idx[label_list[i]])
-        x = [word_to_idx[w] for w in ingred_list[i]]
+        x = []
+        for w in ingred_list[i]:
+            x.append(word_to_idx[w] if w in keys else 1)
         for j in range(len(x), max_len):
             x.append(0)
         X.append(x)
@@ -45,6 +51,7 @@ def get_data(data_file, no_labels=False):
     ingred_list = []
     label_list = []
     max_len = 0
+    lengths = []
     for item in data:
         if not no_labels:
             labels.add(item['cuisine'])
@@ -54,68 +61,46 @@ def get_data(data_file, no_labels=False):
             for w in tokenize(ingred):
                 vocab.add(w)
                 l.append(w)
-        ingred_list.append(l)
-        if len(l) > max_len:
-            max_len = len(l)
-
+        if len(l) > FIX_LEN:
+            ingred_list.append(l[:FIX_LEN])
+        else:
+            ingred_list.append(l)
+        lengths.append(len(l))
+        max_len = FIX_LEN
     print "Vocab Length: " + str(len(vocab))
     print "Ingredient max length: " + str(max_len)
     print "Number of recipes: " + str(len(label_list))
-
+    # print sum(i > 40 for i in lengths)
     if not no_labels:
         return ingred_list, label_list, vocab, labels, max_len
     else:
-        return ingred_list, vocab, max_len
+        return ingred_list, None, vocab, None, max_len
 
-
-def build_dataset(data_file, sent_len=0):
-    """
-    Loads data, builds vocab, calls vectorize and returns dataset as a numpy array
-    :param data_file: Path to data
-    :param sent_len: Max length of sentence
-    :return: Vectorized data, Vectorized labels, index to label dict, word to index dict
-    """
-    ingred_list, label_list, vocab, labels, max_len = get_data(data_file)
-    if max_len < sent_len:
-        max_len = sent_len
-    label_to_idx = dict()
-    idx_to_label = dict()
-    word_to_idx = dict()
-    for idx, val in enumerate(labels):
-        label_to_idx[val] = idx
-        idx_to_label[idx] = val
-    for idx, val in enumerate(vocab):
-        word_to_idx[val] = idx + 2 #Reserve 0 for padding, 1 for unknown
-
-    word_to_idx['__PAD__'] = 0
-    word_to_idx['__UNK__'] = 1
-    X, Y = vectorize(label_to_idx, word_to_idx, ingred_list, label_list, max_len)
-
-    return X, Y, idx_to_label, word_to_idx
 
 
 def main():
-    #Extracting feature vector with only word indices
-    X_train, Y_train, idx_to_label, word_to_idx = build_dataset(constants.TRAIN_FILE)
+    ingred_list, label_list, vocab, labels, max_len = get_data(constants.TRAIN_FILE)
+    label_to_idx = dict()
+    idx_to_label = dict()
+    for idx, val in enumerate(labels):
+        label_to_idx[val] = idx
+        idx_to_label[idx] = val
+
+    word_to_idx = dict()
+    for idx, val in enumerate(vocab):
+        word_to_idx[val] = idx + 2 #Reserve 0 for padding, 1 for unknown
+    word_to_idx['__PAD__'] = 0
+    word_to_idx['__UNK__'] = 1
+
+    X_train, Y_train = vectorize(label_to_idx, word_to_idx, ingred_list, label_list, max_len)
     print "X_train shape: " +str(X_train.shape)
     print "Y_train shape" + str(Y_train.shape)
 
-    #Extracting BOW features
-    # ingredients, label_list, max_len = get_data_minimal(constants.TRAIN_FILE)
-    # train_count_vect = CountVectorizer()
-    # X_train_bow = train_count_vect.fit_transform(ingredients)
-
     #Extracting dev feature vector with only word indices
-    X_dev, Y_dev, _, _ = build_dataset(constants.DEV_FILE, X_train.shape[1])
+    ingred_list_dev, label_list_dev, _, _, _ = get_data(constants.TRAIN_FILE)
+    X_dev, Y_dev = vectorize(label_to_idx, word_to_idx, ingred_list_dev, label_list_dev, max_len)
     print "X_dev shape: " +str(X_dev.shape)
     print "Y_dev shape" + str(Y_dev.shape)
-
-    #Extracting BOW feature vector for dev set
-    # ingredients, label_list, max_len = get_data_minimal(constants.DEV_FILE)
-    # dev_count_vect = CountVectorizer(vocabulary=train_count_vect.vocabulary_)
-    # X_dev_bow = dev_count_vect.fit_transform(ingredients)
-    # print X_train_bow.shape
-    # print X_dev_bow.shape
 
     utils.write_data(idx_to_label, constants.IDX_TO_LABEL_FILE)
     utils.write_data(word_to_idx, constants.WORD_TO_IDX_FILE)
@@ -123,8 +108,6 @@ def main():
     utils.write_data(Y_train, constants.Y_TRAIN_FILE)
     utils.write_data(X_dev, constants.X_DEV_FILE)
     utils.write_data(Y_dev, constants.Y_DEV_FILE)
-    # utils.write_data(X_train_bow.todense(), constants.X_TRAIN_BOW_FILE)
-    # utils.write_data(X_dev_bow.todense(), constants.X_DEV_BOW_FILE)
 
 if __name__ == '__main__':
     main()
