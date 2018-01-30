@@ -16,8 +16,8 @@ def main():
         idx_to_labels = pickle.load(fp)
 
     #Create Dataset object
-    data = RecipeDataset(constants.X_TRAIN_BOW_FILE, constants.Y_TRAIN_FILE,
-                         constants.X_DEV_BOW_FILE, constants.Y_DEV_FILE)
+    data = RecipeDataset(constants.X_TRAIN_FILE, constants.Y_TRAIN_FILE,
+                         constants.X_DEV_FILE, constants.Y_DEV_FILE)
 
     #Instantiate model
     model = RecipeNet(len(word_to_idx), len(idx_to_labels), data.get_max_len())
