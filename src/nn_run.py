@@ -5,7 +5,6 @@ from torch.utils.data import DataLoader
 
 from nn_model import *
 import utils
-import nn_preprocessing
 
 
 def main():
@@ -20,7 +19,7 @@ def main():
                          constants.X_DEV_FILE, constants.Y_DEV_FILE)
 
     #Instantiate model
-    model = RecipeNet(len(word_to_idx), len(idx_to_labels), data.get_max_len())
+    model = RecipeNet2(len(word_to_idx), len(idx_to_labels), data.get_max_len())
     if constants.ONGPU:
         model.cuda()
 

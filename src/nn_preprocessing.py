@@ -61,12 +61,15 @@ def get_data(data_file, no_labels=False):
             for w in tokenize(ingred):
                 vocab.add(w)
                 l.append(w)
-        if len(l) > FIX_LEN:
-            ingred_list.append(l[:FIX_LEN])
-        else:
-            ingred_list.append(l)
-        lengths.append(len(l))
-        max_len = FIX_LEN
+        ingred_list.append(l)
+        if len(l) > max_len:
+            max_len = len(l)
+        # if len(l) > FIX_LEN:
+        #     ingred_list.append(l[:FIX_LEN])
+        # else:
+        #     ingred_list.append(l)
+        # lengths.append(len(l))
+        # max_len = FIX_LEN
     print "Vocab Length: " + str(len(vocab))
     print "Ingredient max length: " + str(max_len)
     print "Number of recipes: " + str(len(label_list))
@@ -79,7 +82,14 @@ def get_data(data_file, no_labels=False):
 
 
 def main():
-    ingred_list, label_list, vocab, labels, max_len = get_data(constants.TRAIN_FILE)
+    ingred_list, label_list, vocab_train, labels, max_len = get_data(constants.TRAIN_FILE)
+    ingred_list_dev, label_list_dev, vocab_dev, _, max_len_dev = get_data(constants.DEV_FILE)
+
+    if max_len_dev > max_len:
+        max_len = max_len_dev
+
+    vocab = vocab_train.union(vocab_dev)
+
     label_to_idx = dict()
     idx_to_label = dict()
     for idx, val in enumerate(labels):
@@ -91,15 +101,13 @@ def main():
         word_to_idx[val] = idx + 2 #Reserve 0 for padding, 1 for unknown
     word_to_idx['__PAD__'] = 0
     word_to_idx['__UNK__'] = 1
-
     X_train, Y_train = vectorize(label_to_idx, word_to_idx, ingred_list, label_list, max_len)
-    print "X_train shape: " +str(X_train.shape)
+    print "X_train shape: " + str(X_train.shape)
     print "Y_train shape" + str(Y_train.shape)
 
     #Extracting dev feature vector with only word indices
-    ingred_list_dev, label_list_dev, _, _, _ = get_data(constants.TRAIN_FILE)
     X_dev, Y_dev = vectorize(label_to_idx, word_to_idx, ingred_list_dev, label_list_dev, max_len)
-    print "X_dev shape: " +str(X_dev.shape)
+    print "X_dev shape: " + str(X_dev.shape)
     print "Y_dev shape" + str(Y_dev.shape)
 
     utils.write_data(idx_to_label, constants.IDX_TO_LABEL_FILE)
