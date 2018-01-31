@@ -35,8 +35,6 @@ class RecipeDataset(Dataset):
         with open(y_dev_path, "rb") as fp:
             self.y_dev = pkl.load(fp)
 
-        #Possible improvement - split dev set
-
     def __len__(self):
         return self.train_len
 
@@ -124,8 +122,8 @@ class RecipeNet2(nn.Module):
         """
         x = self.embedding(x)
         x = x.view(x.shape[0], -1)
-        x = self.dropout(self.fc1(x))
-        x = self.dropout(self.fc2(x))
+        x = self.dropout(F.relu(self.fc1(x)))
+        x = self.dropout(F.relu(self.fc2(x)))
         logit = self.fc3(x)
 
         scores = self.softmax(logit)

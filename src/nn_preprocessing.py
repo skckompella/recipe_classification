@@ -101,11 +101,13 @@ def main():
         word_to_idx[val] = idx + 2 #Reserve 0 for padding, 1 for unknown
     word_to_idx['__PAD__'] = 0
     word_to_idx['__UNK__'] = 1
+
+    #Build train feature vectors
     X_train, Y_train = vectorize(label_to_idx, word_to_idx, ingred_list, label_list, max_len)
     print "X_train shape: " + str(X_train.shape)
     print "Y_train shape" + str(Y_train.shape)
 
-    #Extracting dev feature vector with only word indices
+    #Build dev feature vectors
     X_dev, Y_dev = vectorize(label_to_idx, word_to_idx, ingred_list_dev, label_list_dev, max_len)
     print "X_dev shape: " + str(X_dev.shape)
     print "Y_dev shape" + str(Y_dev.shape)
