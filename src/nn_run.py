@@ -39,6 +39,7 @@ def main():
     for iter in range(constants.NUM_EPOCHS):
         running_loss = 0.0
         running_acc = 0.0
+        model.train()
         for i_batch, (x, y) in enumerate(dloader):
             if constants.ONGPU:
                 x, y = Variable(x.cuda(), requires_grad=False), Variable(y.cuda(), requires_grad=False)
@@ -52,11 +53,13 @@ def main():
 
             running_loss += loss.data[0]
             running_acc += utils.get_accuracy(output.max(1)[1], y)
+
         print("Train: Epoch: %d Loss: %.3f Accuracy: %.3f" % (
                 iter + 1, running_loss / len(dloader), running_acc / len(dloader)))
         print("----------------------------------------------")
 
         if(iter % 2 == 0):
+            model.eval()
             out = model.forward(x_dev)
             _, preds = out.max(1)
             print ("Validation Accuracy: %f" % (utils.get_accuracy(preds, y_dev)))
