@@ -43,6 +43,13 @@ This runs train, validation and test. You can pass any other file to test() to t
  python nn_preprocessing.py  #Required only once
  python keras_run.py
 ``` 
+### Load saved model for Keras MLP
+Copy model.h5 to recipe_classification/saved_models
+```bash 
+ cd src
+ python nn_preprocessing.py  #Required only once
+ python keras_run.py 1
+``` 
 
 ### Run Neural network models (Runs CNN model by default):
 ```bash 
