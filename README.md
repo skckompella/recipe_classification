@@ -17,6 +17,7 @@
 | Multinomial Naive Bayes | baseline_methods.py | 61.6 %              |
 | Linear SVM              | baseline_methods.py | 67.2 %              | 
 | Logistic Regression     | lr_run.py           | 66.1 %              |      
+| MLP in Keras            | keras_run.py        | 62.7%
 | Multi Layer Perceptron  | nn_model.py         | 6.4 %  
 | Conv Net + MLP          | nn_model.py         | 3.1 %
  
@@ -36,6 +37,12 @@ This runs train, validation and test. You can pass any other file to test() to t
  cd src
  python baseline_methods.py
 ```
+### Run Keras MLP model
+```bash 
+ cd src
+ python nn_preprocessing.py  #Required only once
+ python keras_run.py
+``` 
 
 ### Run Neural network models (Runs CNN model by default):
 ```bash 
@@ -51,14 +58,12 @@ This runs train, validation and test. You can pass any other file to test() to t
  
  I wanted to see how neural network models would perform. Given that bag of words will be extremely sparse, I used the usual lookup based embeddings for the ingredients. I also considered pretrained word embeddings as it will be much denser representation but felt it should not give me any meaningful increase in performance. The reason being - there is no real structure in the input. It is just a set of ingredients. Were they mixed with natural language sentences, it would be more appropriate to use them as they carry syntactic and semantic information. I felt it was not needed for this task. 
  
- I first tried a feedforward neural network varying it between 3 to 5 layers. This gave me an accuracy score of 6.4%. While this does look abysmal, it was better than the conv net model. The conv net model was a bunch of convilutional layers with different filter sizes (varying between [2,3] to [2,3,4,5] ) followed by a max-pool layer for each of the conv layer and then a MLP classfier (based on https://arxiv.org/pdf/1408.5882.pdf). This gave me an even worse score of 3.1%. After about 3 hours of fine tuning, I decided to halt that effort. 
+ I then resorted to a logistic regression model to obtain a respectable classifier that also gives me probabilities. This gave me a marginally inferior score compared to SVM but gave me probabilities. I am using this model as my final submission for this Project.
  
- I then resorted to a logistic regression model to obtain a respectable classifier that also gives me probabilities. This gave me a marginally inferior score compared to SVM but gave me probabilities. I am using this model as my final submission for this Project. 
+ Neural network model is a simple 3 layer MLP for now. Although other models can be tried, I could not do it due to lack of time
  
  ## Discussion
- I was really surprised by the neural network performance given that it was a sufficiently large dataset. Moreover, as there is no real language information being conveyed and it is purely word counts that matter, I expected that neural networks will ace this dataset. It should also be noted that the conv net's training accuracy went up to almost 70% but the validation accuracy remained abysmally low. I had to regularize it pretty heavily in order to keep the model from overfitting that heavily.  
- 
-A possible improvement for the neural network model is to remove the pooling layer and used the concatenated convolution output for inference. I tried to do this but it was extremely slow on my laptop and I was running out of memory on the cluster due to many parallel users.
+The simple Keras MLP model itself has a lot of room for improvement. Given the time, it can get at least +5% gain in accuracy. I can also try CNN model I tried in pytorch and that is sure to give some improvement. 
  
 Another possible improvement would be lemmatize/stem words in the dataset. as this would reduce the number of words in the vocabulary. But I was skeptical of this solution given that most words are nouns and the improvement would not be substantial. 
  
