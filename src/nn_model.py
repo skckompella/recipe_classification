@@ -105,7 +105,6 @@ class RecipeNet2(nn.Module):
         self.vocab_len = vocab_len
         self.num_labels = num_labels
         self.embedding_size = constants.EMBEDDING_SIZE
-        self.kernel_sizes = constants.KERNEL_SIZES
 
         self.embedding = nn.Embedding(vocab_len, self.embedding_size, padding_idx=NULL_IDX)
         self.fc1 = nn.Linear(max_len*self.embedding_size, 100)
@@ -124,9 +123,13 @@ class RecipeNet2(nn.Module):
         x = x.view(x.shape[0], -1)
         x = self.dropout(F.relu(self.fc1(x)))
         x = self.dropout(F.relu(self.fc2(x)))
+        # x.register_hook(print_grad)
+
         logit = self.fc3(x)
 
         scores = self.softmax(logit)
         return scores
 
 
+def print_grad(grad):
+    print grad
