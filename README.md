@@ -63,11 +63,11 @@ Copy model.h5 to recipe_classification/saved_models
  
  With the same set of features (word counts), I tried a SVM classifier. Non linear models were taking forever to converge due to high sparsity. After some fine tuning, this model gave me the highest accuracy on dev set. However, since it uses a hinge loss, I cannot obtain a probability score as was needed in the problem.
  
- I wanted to see how neural network models would perform. Given that bag of words will be extremely sparse, I used the usual lookup based embeddings for the ingredients. I also considered pretrained word embeddings as it will be much denser representation but felt it should not give me any meaningful increase in performance. The reason being - there is no real structure in the input. It is just a set of ingredients. Were they mixed with natural language sentences, it would be more appropriate to use them as they carry syntactic and semantic information. I felt it was not needed for this task. 
  
  I then resorted to a logistic regression model to obtain a respectable classifier that also gives me probabilities. This gave me a marginally inferior score compared to SVM but gave me probabilities. I am using this model as my final submission for this Project.
  
  Neural network model is a simple 3 layer MLP for now. Although other models can be tried, I could not do it due to lack of time
+Given that bag of words will be extremely sparse, I used the usual lookup based embeddings (learned) for the ingredients. I also considered pretrained word embeddings as it will be much denser representation but felt it should not give me any meaningful increase in performance. The reason being - there is no real structure in the input. It is just a set of ingredients. Were they mixed with natural language sentences, it would be more appropriate to use them as they carry syntactic and semantic information. I felt it was not needed for this task. 
  
  ## Discussion
 The simple Keras MLP model itself has a lot of room for improvement. Given the time, it can get at least +5% gain in accuracy. I can also try CNN model I tried in pytorch and that is sure to give some improvement. 
