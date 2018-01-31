@@ -1,12 +1,17 @@
 from keras.models import Sequential
 from keras.layers.embeddings import Embedding
 from keras.layers import Activation, Dense, Merge, Permute, Dropout, Flatten
+from keras.models import load_model
 import numpy as np
 import constants
 
 
+
 class RecipeNet():
-    def __init__(self, vocab_len, num_labels, max_len):
+    def __init__(self):
+        pass
+
+    def build_net(self, vocab_len, num_labels, max_len):
         self.embedding_size = constants.EMBEDDING_SIZE
         self.model = Sequential()
         self.model.add(Embedding(input_dim=vocab_len, output_dim=self.embedding_size, input_length=max_len))
@@ -28,14 +33,16 @@ class RecipeNet():
                        validation_data=(x_dev, y_dev))
 
 
-    def predict(self, x_test, id_list, idx_to_label, topk=3):
+    def predict_outputs(self, x_test, id_list, idx_to_label, topk=3):
         probs = self.model.predict_proba(x_test, batch_size=constants.BATCH_SIZE)
         best_n = np.argsort(probs, axis=1)
-        print best_n
-        print id_list
         for i in range(len(id_list)):
             for j in range(1, topk + 1):
                 print str(id_list[i]) + "," + idx_to_label[best_n[i][-j]] + "," + str(probs[i][best_n[i][-j]])
 
     def save(self):
         self.model.save(constants.SAVED_MODEL_PATH)
+
+    def load(self):
+        self.model = load_model(constants.SAVED_MODEL_PATH)
+
