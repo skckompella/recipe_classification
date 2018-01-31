@@ -17,7 +17,7 @@
 | Multinomial Naive Bayes | baseline_methods.py | 61.6 %              |
 | Linear SVM              | baseline_methods.py | 67.2 %              | 
 | Logistic Regression     | lr_run.py           | 66.1 %              |      
-| MLP in Keras            | keras_run.py        | 62.7%
+| MLP in Keras            | keras_run.py        | 62.7% (3 epochs, batch_size= 64, lr = 0.0001)
 | Multi Layer Perceptron  | nn_model.py         | 6.4 %  
 | Conv Net + MLP          | nn_model.py         | 3.1 %
  
